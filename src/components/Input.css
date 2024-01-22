@@ -1,0 +1,26 @@
+.input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5%;
+}
+
+.input label {
+    margin-right: 5%;
+}
+
+.input input {
+    padding: 2%;
+    border: none;
+    border-radius: 15px;
+}
+
+@media (max-width: 1000px) {
+    .input {
+        flex-direction: column;
+        padding: 0;
+    }
+    .input label {
+        margin-right: 0;
+    }
+}

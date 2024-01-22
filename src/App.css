@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200&family=Oswald&display=swap');
+
+*{
+    font-family: 'DM Sans', sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background: linear-gradient(rgba(152, 159, 255, 0.9), rgba(25, 19, 44, 0.9)), url("./assets/background.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 100dvh;
+}
