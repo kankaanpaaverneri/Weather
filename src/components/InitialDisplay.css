@@ -1,0 +1,13 @@
+#initial-display {
+    position: absolute;
+    inset: 10% 0 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 100;
+}
+
+#initial-display h1 {
+    text-shadow: 1px 1px 5px black;
+}
