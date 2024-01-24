@@ -3,6 +3,7 @@ import './App.css'
 import Header from './components/Header';
 import WeatherResults from './components/WeatherResults';
 import InitialDisplay from './components/InitialDisplay';
+import ErrorDisplay from './components/ErrorDisplay';
 
 export const SearchBarContext = createContext({});
 
@@ -10,6 +11,8 @@ function App() {
   const [weatherData, setWeatherData] = useState(undefined);
   const [temperatures, setTemperatures] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [errorDisplay, setErrorDisplay] = useState(false);
+
   const searchBarRefs = {
     country: useRef(),
     city: useRef()
@@ -24,6 +27,8 @@ function App() {
       }
     catch(error) {
       setLoading(() => false);
+      setErrorDisplay(() => true);
+      setTemperatures(() => []);
       console.log("Error in fetchForecast: ", error);
     }
   }
@@ -33,11 +38,14 @@ function App() {
         setLoading(() => true);
         const promise = await fetch(url);
         const data = await promise.json();
+        console.log(data);
         const {lat, lon} = data.features[0].properties;
         fetchForecast(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m`);
     }
     catch(error) {
         setLoading(() => false);
+        setErrorDisplay(() => true);
+        setTemperatures(() => []);
         console.log("error in fetchLocation: ", error);
     }
   }
@@ -45,10 +53,13 @@ function App() {
   useEffect(() => {
     console.log("weatherData: ", weatherData);
     //Save temperatures
-    if(weatherData)
+    if(weatherData) {
       setTemperatures(() => {
         return [...weatherData.hourly.temperature_2m];
       });
+      setErrorDisplay(() => false);
+    }
+      
 
     setLoading(() => false);
   }, [weatherData]);
@@ -62,7 +73,7 @@ function App() {
     const country = encodeURIComponent(searchBarRefs.country.current.value);
     const city = encodeURIComponent(searchBarRefs.city.current.value);
 
-    fetchLocation(`https://api.geoapify.com/v1/geocode/search?text=38%2C%20${city}%20W1H%201LJ%2C%20${country}&apiKey=2dafca2a26414552b3f472fefd7a4a52`);
+    fetchLocation(`https://api.geoapify.com/v1/geocode/search?text=%2C%20${city}%20%2C%20${country}&apiKey=2dafca2a26414552b3f472fefd7a4a52`);
   }
 
   return (
@@ -72,10 +83,12 @@ function App() {
         loading={loading}
         getWeatherData={getWeatherData}/>
       </SearchBarContext.Provider>
-      {temperatures.length > 0 ? <WeatherResults
+      {temperatures.length > 0 && <WeatherResults
       allTemperatures={temperatures}
       location={searchBarRefs.city.current.value}
-      /> : <InitialDisplay/>}
+      />}
+      {errorDisplay && <ErrorDisplay/>}
+      {!errorDisplay && !weatherData && <InitialDisplay/>}
     </section>
   )
 }

@@ -25,7 +25,10 @@ const Header = ({getWeatherData, loading}) => {
                 <h1>Weather</h1>
                 <Input ref={ctx.country} label="Country" inputPlaceholder="Finland" />
                 <Input ref={ctx.city} label="City" inputPlaceholder="Helsinki" />
-                <button onClick={getWeatherData}>{loading ? "Loading" : "Search"}</button>
+                <button onClick={() => {
+                    getWeatherData();
+                    openHeader();
+                }}>{loading ? "Loading" : "Search"}</button>
             </div>
         </header>
         </>
